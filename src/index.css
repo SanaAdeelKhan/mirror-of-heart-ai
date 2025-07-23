@@ -8,29 +8,49 @@ All colors MUST be HSL.
 
 @layer base {
   :root {
-    --background: 0 0% 100%;
-    --foreground: 222.2 84% 4.9%;
+    --background: 150 15% 97%;
+    --foreground: 160 25% 15%;
 
-    --card: 0 0% 100%;
-    --card-foreground: 222.2 84% 4.9%;
+    --card: 150 20% 98%;
+    --card-foreground: 160 25% 15%;
 
-    --popover: 0 0% 100%;
-    --popover-foreground: 222.2 84% 4.9%;
+    --popover: 150 20% 98%;
+    --popover-foreground: 160 25% 15%;
 
-    --primary: 222.2 47.4% 11.2%;
-    --primary-foreground: 210 40% 98%;
+    --primary: 158 64% 25%;
+    --primary-foreground: 150 15% 97%;
 
-    --secondary: 210 40% 96.1%;
-    --secondary-foreground: 222.2 47.4% 11.2%;
+    --secondary: 150 20% 92%;
+    --secondary-foreground: 160 25% 25%;
 
-    --muted: 210 40% 96.1%;
-    --muted-foreground: 215.4 16.3% 46.9%;
+    --muted: 150 15% 94%;
+    --muted-foreground: 160 15% 45%;
 
-    --accent: 210 40% 96.1%;
-    --accent-foreground: 222.2 47.4% 11.2%;
+    --accent: 160 40% 88%;
+    --accent-foreground: 160 25% 25%;
 
     --destructive: 0 84.2% 60.2%;
     --destructive-foreground: 210 40% 98%;
+
+    /* Islamic-inspired colors */
+    --emerald: 158 64% 25%;
+    --emerald-light: 158 50% 35%;
+    --emerald-lighter: 158 30% 70%;
+    --gold: 43 96% 56%;
+    --gold-light: 43 84% 65%;
+    --pearl: 150 15% 97%;
+    --sage: 150 20% 88%;
+
+    /* Gradients */
+    --gradient-primary: linear-gradient(135deg, hsl(158 64% 25%), hsl(158 50% 35%));
+    --gradient-spiritual: linear-gradient(135deg, hsl(158 64% 25%), hsl(43 96% 56%));
+    --gradient-peaceful: linear-gradient(180deg, hsl(150 15% 97%), hsl(150 20% 92%));
+    --gradient-overlay: linear-gradient(135deg, hsl(158 64% 25% / 0.1), hsl(43 96% 56% / 0.1));
+
+    /* Shadows */
+    --shadow-spiritual: 0 10px 40px -10px hsl(158 64% 25% / 0.3);
+    --shadow-gentle: 0 4px 20px -5px hsl(158 30% 70% / 0.4);
+    --shadow-warm: 0 8px 30px -8px hsl(43 96% 56% / 0.2);
 
     --border: 214.3 31.8% 91.4%;
     --input: 214.3 31.8% 91.4%;
@@ -101,5 +121,9 @@ All colors MUST be HSL.
 
   body {
     @apply bg-background text-foreground;
+  }
+  
+  .font-arabic {
+    font-family: 'Amiri', 'Scheherazade New', 'Noto Sans Arabic', serif;
   }
 }

@@ -52,6 +52,17 @@ export default {
 					DEFAULT: 'hsl(var(--card))',
 					foreground: 'hsl(var(--card-foreground))'
 				},
+				emerald: {
+					DEFAULT: 'hsl(var(--emerald))',
+					light: 'hsl(var(--emerald-light))',
+					lighter: 'hsl(var(--emerald-lighter))'
+				},
+				gold: {
+					DEFAULT: 'hsl(var(--gold))',
+					light: 'hsl(var(--gold-light))'
+				},
+				pearl: 'hsl(var(--pearl))',
+				sage: 'hsl(var(--sage))',
 				sidebar: {
 					DEFAULT: 'hsl(var(--sidebar-background))',
 					foreground: 'hsl(var(--sidebar-foreground))',
@@ -62,6 +73,17 @@ export default {
 					border: 'hsl(var(--sidebar-border))',
 					ring: 'hsl(var(--sidebar-ring))'
 				}
+			},
+			backgroundImage: {
+				'gradient-primary': 'var(--gradient-primary)',
+				'gradient-spiritual': 'var(--gradient-spiritual)',
+				'gradient-peaceful': 'var(--gradient-peaceful)',
+				'gradient-overlay': 'var(--gradient-overlay)'
+			},
+			boxShadow: {
+				'spiritual': 'var(--shadow-spiritual)',
+				'gentle': 'var(--shadow-gentle)',
+				'warm': 'var(--shadow-warm)'
 			},
 			borderRadius: {
 				lg: 'var(--radius)',
