@@ -40,7 +40,7 @@ User message: "${message}"
 
 Respond with empathy and care, as if speaking to a dear friend who needs emotional support.`;
 
-    const response = await fetch(`https://generativelanguage.googleapis.com/v1beta/models/gemini-pro:generateContent?key=${geminiApiKey}`, {
+    const response = await fetch(`https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash-latest:generateContent?key=${geminiApiKey}`, {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
@@ -50,7 +50,13 @@ Respond with empathy and care, as if speaking to a dear friend who needs emotion
           parts: [{
             text: systemPrompt
           }]
-        }]
+        }],
+        generationConfig: {
+          temperature: 0.7,
+          topK: 40,
+          topP: 0.95,
+          maxOutputTokens: 1024,
+        }
       })
     });
 
