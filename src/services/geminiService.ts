@@ -59,12 +59,8 @@ const spiritualDatabase = {
 };
 
 class GeminiService {
-  private apiKey: string = '';
-  private baseUrl = 'https://generativelanguage.googleapis.com/v1beta/models/gemini-pro:generateContent';
-
-  setApiKey(apiKey: string) {
-    this.apiKey = apiKey;
-  }
+  private supabaseUrl = 'https://xfieuamzkcdzqzzbtnsx.supabase.co/functions/v1/chat-with-gemini';
+  private supabaseAnonKey = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InhmaWV1YW16a2NkenF6emJ0bnN4Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NTMyODUxMjEsImV4cCI6MjA2ODg2MTEyMX0.7Pwl15T02IurOUDEgtZAsCjU2K7Zd5e5LuBuDEdxZEg';
 
   private detectEmotion(text: string): string {
     const lowerText = text.toLowerCase();
@@ -101,53 +97,25 @@ class GeminiService {
   }
 
   async generateResponse(userMessage: string): Promise<GeminiResponse> {
-    // Simulate API call if no API key is provided
-    if (!this.apiKey) {
-      return this.generateMockResponse(userMessage);
-    }
-
     try {
-      const systemPrompt = `You are Mirror of Heart, an AI assistant designed to provide emotional and spiritual support to Muslim users. Your responses should be:
-
-1. Empathetic and understanding
-2. Supportive without being preachy
-3. Respectful of Islamic values and teachings
-4. Focused on emotional well-being
-5. Concise but meaningful (2-3 sentences)
-
-Guidelines:
-- Use warm, caring language
-- Acknowledge the user's feelings
-- Offer gentle guidance or perspective
-- Avoid giving specific religious rulings (fatwa)
-- Be inclusive of different levels of faith
-- End with encouraging words
-
-User message: "${userMessage}"
-
-Respond with empathy and care, as if speaking to a dear friend who needs emotional support.`;
-
-      const response = await fetch(`${this.baseUrl}?key=${this.apiKey}`, {
+      const response = await fetch(this.supabaseUrl, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
+          'Authorization': `Bearer ${this.supabaseAnonKey}`,
+          'apikey': this.supabaseAnonKey,
         },
         body: JSON.stringify({
-          contents: [{
-            parts: [{
-              text: systemPrompt
-            }]
-          }]
+          message: userMessage
         })
       });
 
       if (!response.ok) {
-        throw new Error('Failed to get response from Gemini API');
+        throw new Error('Failed to get response from AI service');
       }
 
       const data = await response.json();
-      const aiText = data.candidates?.[0]?.content?.parts?.[0]?.text || 
-                    "I'm here to listen and support you. May Allah grant you peace and comfort.";
+      const aiText = data.text || "I'm here to listen and support you. May Allah grant you peace and comfort.";
 
       const emotion = this.detectEmotion(userMessage);
       const spiritualContent = this.getSpiritualContent(emotion);
@@ -157,7 +125,7 @@ Respond with empathy and care, as if speaking to a dear friend who needs emotion
         spiritualContent
       };
     } catch (error) {
-      console.error('Error calling Gemini API:', error);
+      console.error('Error calling AI service:', error);
       return this.generateMockResponse(userMessage);
     }
   }
