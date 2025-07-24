@@ -187,6 +187,81 @@ const spiritualDatabase = {
       translation: 'And when you have decided, then rely upon Allah. Indeed, Allah loves those who rely upon Him.',
       reference: 'Quran 3:159'
     }
+  ],
+  // Universal verses for any situation - these enhance all responses
+  universal: [
+    {
+      type: 'ayah' as const,
+      arabic: 'وَمَا تَوْفِيقِي إِلَّا بِاللَّهِ ۚ عَلَيْهِ تَوَكَّلْتُ وَإِلَيْهِ أُنِيبُ',
+      translation: 'And my success is not but through Allah. Upon Him I have relied, and to Him I return.',
+      reference: 'Quran 11:88'
+    },
+    {
+      type: 'ayah' as const,
+      arabic: 'وَاللَّهُ غَالِبٌ عَلَىٰ أَمْرِهِ وَلَٰكِنَّ أَكْثَرَ النَّاسِ لَا يَعْلَمُونَ',
+      translation: 'And Allah is predominant over His affair, but most of the people do not know.',
+      reference: 'Quran 12:21'
+    },
+    {
+      type: 'ayah' as const,
+      arabic: 'رَبَّنَا عَلَيْكَ تَوَكَّلْنَا وَإِلَيْكَ أَنَبْنَا وَإِلَيْكَ الْمَصِيرُ',
+      translation: 'Our Lord, upon You we have relied, and to You we have returned, and to You is the destination.',
+      reference: 'Quran 60:4'
+    },
+    {
+      type: 'ayah' as const,
+      arabic: 'وَلِلَّهِ الْأَمْرُ مِن قَبْلُ وَمِن بَعْدُ',
+      translation: 'And to Allah belongs the command before and after.',
+      reference: 'Quran 30:4'
+    },
+    {
+      type: 'dhikr' as const,
+      arabic: 'سُبْحَانَ اللَّهِ وَبِحَمْدِهِ سُبْحَانَ اللَّهِ الْعَظِيمِ',
+      translation: 'Glory is to Allah and praise is to Him. Glory is to Allah, the Magnificent.',
+      reference: 'Sahih Bukhari'
+    },
+    {
+      type: 'dua' as const,
+      arabic: 'رَبَّنَا أَفْرِغْ عَلَيْنَا صَبْرًا وَثَبِّتْ أَقْدَامَنَا',
+      translation: 'Our Lord, pour upon us patience and plant firmly our feet.',
+      reference: 'Quran 2:250'
+    },
+    {
+      type: 'ayah' as const,
+      arabic: 'وَمَن يُؤْمِن بِاللَّهِ يَهْدِ قَلْبَهُ',
+      translation: 'And whoever believes in Allah - He will guide his heart.',
+      reference: 'Quran 64:11'
+    },
+    {
+      type: 'ayah' as const,
+      arabic: 'إِنَّ اللَّهَ لَا يُضِيعُ أَجْرَ الْمُحْسِنِينَ',
+      translation: 'Indeed, Allah does not allow to be lost the reward of those who do good.',
+      reference: 'Quran 9:120'
+    },
+    {
+      type: 'dua' as const,
+      arabic: 'رَبِّ اشْرَحْ لِي صَدْرِي وَيَسِّرْ لِي أَمْرِي',
+      translation: 'My Lord, expand for me my breast and ease for me my task.',
+      reference: 'Quran 20:25-26'
+    },
+    {
+      type: 'ayah' as const,
+      arabic: 'وَكَانَ حَقًّا عَلَيْنَا نَصْرُ الْمُؤْمِنِينَ',
+      translation: 'And it was an obligation upon Us to aid the believers.',
+      reference: 'Quran 30:47'
+    },
+    {
+      type: 'dhikr' as const,
+      arabic: 'لَا إِلَٰهَ إِلَّا اللَّهُ وَحْدَهُ لَا شَرِيكَ لَهُ',
+      translation: 'There is no deity except Allah, alone without partner.',
+      reference: 'Sahih Bukhari'
+    },
+    {
+      type: 'ayah' as const,
+      arabic: 'وَمَن يَتَّقِ اللَّهَ يَجْعَل لَّهُ فُرْقَانًا',
+      translation: 'And whoever fears Allah - He will make for him a criterion.',
+      reference: 'Quran 8:29'
+    }
   ]
 };
 
@@ -263,10 +338,26 @@ class GeminiService {
   }
 
   private getSpiritualContent(emotion: string): SpiritualContent | undefined {
+    // 30% chance to use universal verses for any situation
+    const useUniversal = Math.random() < 0.3;
+    
+    if (useUniversal && spiritualDatabase.universal) {
+      const universalContents = spiritualDatabase.universal;
+      return universalContents[Math.floor(Math.random() * universalContents.length)];
+    }
+    
+    // Otherwise use situation-specific verses
     const contents = spiritualDatabase[emotion as keyof typeof spiritualDatabase];
     if (contents && contents.length > 0) {
       return contents[Math.floor(Math.random() * contents.length)];
     }
+    
+    // Fallback to universal verses if no specific category found
+    const universalContents = spiritualDatabase.universal;
+    if (universalContents && universalContents.length > 0) {
+      return universalContents[Math.floor(Math.random() * universalContents.length)];
+    }
+    
     return undefined;
   }
 
