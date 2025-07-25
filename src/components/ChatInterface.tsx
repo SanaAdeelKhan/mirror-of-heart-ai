@@ -3,20 +3,33 @@ import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Card } from '@/components/ui/card';
 import { ScrollArea } from '@/components/ui/scroll-area';
-import { Send, Heart, Sparkles } from 'lucide-react';
+import { Send, Heart, Sparkles, Brain, User } from 'lucide-react';
 import { cn } from '@/lib/utils';
+import { VoiceInput } from './VoiceInput';
 
 interface Message {
   id: string;
   text: string;
   isUser: boolean;
   timestamp: Date;
+  voiceAnalysis?: {
+    emotion: string;
+    behavior: string;
+    confidence: number;
+  };
   spiritualContent?: {
     type: 'ayah' | 'dua' | 'dhikr';
     arabic?: string;
     translation?: string;
     reference?: string;
   };
+}
+
+interface VoiceAnalysis {
+  emotion: string;
+  behavior: string;
+  confidence: number;
+  text: string;
 }
 
 interface ChatInterfaceProps {
@@ -79,6 +92,40 @@ export const ChatInterface: React.FC<ChatInterfaceProps> = ({ onSendMessage, isL
     }
   };
 
+  const handleVoiceMessage = async (analysis: VoiceAnalysis) => {
+    if (isLoading) return;
+
+    const userMessage: Message = {
+      id: Date.now().toString(),
+      text: analysis.text,
+      isUser: true,
+      timestamp: new Date(),
+      voiceAnalysis: {
+        emotion: analysis.emotion,
+        behavior: analysis.behavior,
+        confidence: analysis.confidence
+      }
+    };
+
+    setMessages(prev => [...prev, userMessage]);
+
+    try {
+      // Send enriched message with emotion and behavior context
+      const enrichedMessage = `${analysis.text} [Voice Analysis - Emotion: ${analysis.emotion}, Behavior: ${analysis.behavior}, Confidence: ${Math.round(analysis.confidence * 100)}%]`;
+      const aiResponse = await onSendMessage(enrichedMessage);
+      setMessages(prev => [...prev, aiResponse]);
+    } catch (error) {
+      console.error('Error sending voice message:', error);
+      const errorMessage: Message = {
+        id: Date.now().toString() + '_error',
+        text: 'I apologize, but I encountered an issue processing your voice message. Please try again. May Allah ease your difficulties.',
+        isUser: false,
+        timestamp: new Date()
+      };
+      setMessages(prev => [...prev, errorMessage]);
+    }
+  };
+
   const handleKeyPress = (e: React.KeyboardEvent) => {
     if (e.key === 'Enter' && !e.shiftKey) {
       e.preventDefault();
@@ -120,14 +167,53 @@ export const ChatInterface: React.FC<ChatInterfaceProps> = ({ onSendMessage, isL
                 )}
               >
                 <div className="space-y-3">
-                  <p className={cn(
-                    "text-sm leading-relaxed",
-                    message.isUser ? "text-pearl" : "text-foreground"
-                  )}>
-                    {message.text}
-                  </p>
-                  
-                  {message.spiritualContent && (
+                   <p className={cn(
+                     "text-sm leading-relaxed",
+                     message.isUser ? "text-pearl" : "text-foreground"
+                   )}>
+                     {message.text}
+                   </p>
+                   
+                   {message.voiceAnalysis && (
+                     <div className="border-t border-emerald-lighter/30 pt-3 space-y-2">
+                       <div className="flex items-center gap-2">
+                         <Brain className="w-4 h-4 text-blue-400" />
+                         <span className="text-xs font-medium text-blue-400 uppercase tracking-wide">
+                           Voice Analysis
+                         </span>
+                       </div>
+                       
+                       <div className="grid grid-cols-2 gap-3 text-xs">
+                         <div className="flex items-center gap-2">
+                           <span className="text-muted-foreground">Emotion:</span>
+                           <span className="capitalize font-medium text-blue-300">
+                             {message.voiceAnalysis.emotion}
+                           </span>
+                         </div>
+                         <div className="flex items-center gap-2">
+                           <span className="text-muted-foreground">Behavior:</span>
+                           <span className="capitalize font-medium text-blue-300">
+                             {message.voiceAnalysis.behavior}
+                           </span>
+                         </div>
+                       </div>
+                       
+                       <div className="flex items-center gap-2">
+                         <span className="text-xs text-muted-foreground">Confidence:</span>
+                         <div className="flex-1 bg-muted rounded-full h-1.5">
+                           <div 
+                             className="bg-gradient-to-r from-blue-400 to-blue-300 h-full rounded-full transition-all duration-300"
+                             style={{ width: `${message.voiceAnalysis.confidence * 100}%` }}
+                           />
+                         </div>
+                         <span className="text-xs text-blue-300 font-medium">
+                           {Math.round(message.voiceAnalysis.confidence * 100)}%
+                         </span>
+                       </div>
+                     </div>
+                   )}
+                   
+                   {message.spiritualContent && (
                     <div className="border-t border-emerald-lighter/30 pt-3 space-y-2">
                       <div className="flex items-center gap-2">
                         <Sparkles className="w-4 h-4 text-gold" />
@@ -186,8 +272,15 @@ export const ChatInterface: React.FC<ChatInterfaceProps> = ({ onSendMessage, isL
         </div>
       </ScrollArea>
 
-      {/* Input */}
+      {/* Voice Input */}
       <div className="p-4 bg-card border-t border-emerald-lighter/20">
+        <div className="max-w-4xl mx-auto">
+          <VoiceInput onVoiceMessage={handleVoiceMessage} isLoading={isLoading} />
+        </div>
+      </div>
+
+      {/* Text Input */}
+      <div className="p-4 bg-card">
         <div className="flex gap-2 max-w-4xl mx-auto">
           <Input
             value={inputValue}
