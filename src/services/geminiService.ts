@@ -271,70 +271,124 @@ class GeminiService {
 
   private detectEmotion(text: string): string {
     const lowerText = text.toLowerCase();
+    const sentences = text.split(/[.!?]+/).map(s => s.trim().toLowerCase());
     
-    // Sadness and despair detection
-    if (lowerText.includes('sad') || lowerText.includes('upset') || lowerText.includes('depressed') || 
-        lowerText.includes('hurt') || lowerText.includes('cry') || lowerText.includes('hopeless') ||
-        lowerText.includes('despair') || lowerText.includes('broken') || lowerText.includes('devastated')) {
-      return 'sadness';
+    // Behavioral pattern analysis
+    const patterns = {
+      sadness: {
+        keywords: ['sad', 'upset', 'depressed', 'hurt', 'cry', 'crying', 'tears', 'hopeless', 'despair', 'broken', 'devastated', 'miserable', 'heartbroken', 'down', 'low'],
+        phrases: ['i feel empty', 'everything is falling apart', 'i want to cry', 'life is meaningless', 'i feel broken', 'nothing matters', 'i am lost'],
+        behaviors: ['why me', 'what\'s the point', 'i give up', 'i can\'t take it anymore', 'everything hurts']
+      },
+      
+      loneliness: {
+        keywords: ['lonely', 'alone', 'isolated', 'empty', 'disconnected', 'abandoned', 'forgotten', 'invisible'],
+        phrases: ['nobody understands', 'no one cares', 'i have no one', 'i feel invisible', 'nobody listens', 'i am all alone'],
+        behaviors: ['everyone left me', 'nobody calls', 'i sit alone', 'no friends', 'family doesn\'t care']
+      },
+      
+      fear: {
+        keywords: ['scared', 'afraid', 'terrified', 'fear', 'nightmare', 'panic', 'phobia', 'frightened'],
+        phrases: ['i am scared', 'what if something bad happens', 'i can\'t face this', 'terrified of', 'afraid that'],
+        behaviors: ['hiding from', 'avoiding', 'running away', 'can\'t handle', 'too scary']
+      },
+      
+      anxiety: {
+        keywords: ['anxious', 'worried', 'stress', 'overwhelmed', 'nervous', 'restless', 'panic', 'tension'],
+        phrases: ['can\'t sleep', 'mind racing', 'heart beating fast', 'sweating', 'shaking', 'can\'t breathe', 'overthinking'],
+        behaviors: ['what if', 'constantly thinking', 'can\'t stop worrying', 'checking repeatedly', 'need to control']
+      },
+      
+      forgiveness: {
+        keywords: ['guilty', 'shame', 'regret', 'forgive', 'mistake', 'sin', 'wrong', 'repent', 'sorry'],
+        phrases: ['i did something wrong', 'allah will never forgive me', 'i am a bad person', 'i feel guilty'],
+        behaviors: ['seeking forgiveness', 'made a mistake', 'did something bad', 'hurt someone', 'want to repent']
+      },
+      
+      guidance: {
+        keywords: ['confused', 'lost', 'direction', 'guidance', 'advice', 'help', 'unclear', 'uncertain'],
+        phrases: ['don\'t know what to do', 'which path to take', 'need guidance', 'show me the way', 'help me decide'],
+        behaviors: ['stuck between choices', 'crossroads', 'difficult decision', 'need direction', 'seeking advice']
+      },
+      
+      strength: {
+        keywords: ['weak', 'tired', 'exhausted', 'drained', 'powerless', 'defeated', 'giving up'],
+        phrases: ['i have no energy', 'can\'t continue', 'too tired to fight', 'no strength left', 'want to give up'],
+        behaviors: ['struggling to cope', 'barely holding on', 'need motivation', 'losing hope', 'can\'t go on']
+      },
+      
+      gratitude: {
+        keywords: ['grateful', 'thank', 'blessed', 'alhamdulillah', 'appreciate', 'blessing', 'fortunate', 'thankful'],
+        phrases: ['thank allah', 'i am blessed', 'grateful for', 'allah has given me', 'feeling blessed'],
+        behaviors: ['counting blessings', 'appreciating', 'recognizing gifts', 'feeling thankful', 'acknowledging goodness']
+      },
+      
+      patience: {
+        keywords: ['patient', 'difficult', 'trial', 'test', 'hardship', 'struggle', 'endure', 'bear', 'waiting'],
+        phrases: ['this is a test', 'allah is testing me', 'need patience', 'hard times', 'difficult period'],
+        behaviors: ['going through hardship', 'facing challenges', 'enduring pain', 'waiting for relief', 'struggling but trying']
+      }
+    };
+    
+    // Score each emotion based on multiple factors
+    const emotionScores: { [key: string]: number } = {};
+    
+    for (const [emotion, pattern] of Object.entries(patterns)) {
+      let score = 0;
+      
+      // Check keywords (base score)
+      pattern.keywords.forEach(keyword => {
+        if (lowerText.includes(keyword)) {
+          score += 1;
+        }
+      });
+      
+      // Check phrases (higher weight)
+      pattern.phrases.forEach(phrase => {
+        if (lowerText.includes(phrase)) {
+          score += 2;
+        }
+      });
+      
+      // Check behavioral patterns (highest weight)
+      pattern.behaviors.forEach(behavior => {
+        if (lowerText.includes(behavior)) {
+          score += 3;
+        }
+      });
+      
+      // Context analysis - look for emotional intensity
+      if (lowerText.includes('very ') || lowerText.includes('extremely ') || lowerText.includes('so ')) {
+        score += 0.5;
+      }
+      
+      // Repetition analysis - if emotion words appear multiple times
+      const wordCount = (lowerText.match(new RegExp(pattern.keywords.join('|'), 'g')) || []).length;
+      if (wordCount > 1) {
+        score += wordCount * 0.3;
+      }
+      
+      // Question patterns suggest confusion/guidance seeking
+      if (emotion === 'guidance' && (lowerText.includes('?') || lowerText.includes('how ') || lowerText.includes('what '))) {
+        score += 1;
+      }
+      
+      // Exclamation marks suggest strong emotions
+      const exclamationCount = (text.match(/!/g) || []).length;
+      if (exclamationCount > 0) {
+        score += exclamationCount * 0.2;
+      }
+      
+      emotionScores[emotion] = score;
     }
     
-    // Loneliness detection
-    if (lowerText.includes('lonely') || lowerText.includes('alone') || lowerText.includes('isolated') ||
-        lowerText.includes('nobody understands') || lowerText.includes('no one cares') ||
-        lowerText.includes('empty') || lowerText.includes('disconnected')) {
-      return 'loneliness';
-    }
+    // Find the emotion with the highest score
+    const sortedEmotions = Object.entries(emotionScores)
+      .sort(([,a], [,b]) => b - a)
+      .filter(([,score]) => score > 0);
     
-    // Fear detection (separate from anxiety)
-    if (lowerText.includes('scared') || lowerText.includes('afraid') || lowerText.includes('terrified') ||
-        lowerText.includes('fear') || lowerText.includes('nightmare') || lowerText.includes('panic attack')) {
-      return 'fear';
-    }
-    
-    // Anxiety and worry detection
-    if (lowerText.includes('anxious') || lowerText.includes('worried') || lowerText.includes('stress') || 
-        lowerText.includes('overwhelmed') || lowerText.includes('can\'t sleep') ||
-        lowerText.includes('restless') || lowerText.includes('nervous')) {
-      return 'anxiety';
-    }
-    
-    // Forgiveness and guilt detection
-    if (lowerText.includes('guilty') || lowerText.includes('shame') || lowerText.includes('regret') ||
-        lowerText.includes('forgive') || lowerText.includes('mistake') || lowerText.includes('sin') ||
-        lowerText.includes('wrong') || lowerText.includes('repent')) {
-      return 'forgiveness';
-    }
-    
-    // Guidance and confusion detection
-    if (lowerText.includes('confused') || lowerText.includes('lost') || lowerText.includes('direction') ||
-        lowerText.includes('guidance') || lowerText.includes('don\'t know') || lowerText.includes('help me') ||
-        lowerText.includes('what should i do') || lowerText.includes('advice')) {
-      return 'guidance';
-    }
-    
-    // Strength and empowerment detection
-    if (lowerText.includes('weak') || lowerText.includes('tired') || lowerText.includes('exhausted') ||
-        lowerText.includes('give up') || lowerText.includes('strength') || lowerText.includes('power') ||
-        lowerText.includes('can\'t continue') || lowerText.includes('motivation')) {
-      return 'strength';
-    }
-    
-    // Gratitude detection
-    if (lowerText.includes('grateful') || lowerText.includes('thank') || lowerText.includes('blessed') || 
-        lowerText.includes('alhamdulillah') || lowerText.includes('appreciate') ||
-        lowerText.includes('blessing') || lowerText.includes('fortunate')) {
-      return 'gratitude';
-    }
-    
-    // Patience detection
-    if (lowerText.includes('patient') || lowerText.includes('difficult') || lowerText.includes('trial') || 
-        lowerText.includes('test') || lowerText.includes('hardship') || lowerText.includes('struggle') ||
-        lowerText.includes('endure') || lowerText.includes('bear')) {
-      return 'patience';
-    }
-    
-    return 'comfort'; // Default fallback
+    // Return the highest scoring emotion, or 'comfort' if no clear emotion detected
+    return sortedEmotions.length > 0 ? sortedEmotions[0][0] : 'comfort';
   }
 
   private getSpiritualContent(emotion: string): SpiritualContent | undefined {
