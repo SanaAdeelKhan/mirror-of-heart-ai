@@ -1,7 +1,8 @@
 import React, { useState, useRef, useEffect } from 'react';
 import { Button } from '@/components/ui/button';
 import { Card } from '@/components/ui/card';
-import { Mic, MicOff, Volume2 } from 'lucide-react';
+import { Input } from '@/components/ui/input';
+import { Mic, MicOff, Volume2, ImagePlus } from 'lucide-react';
 import { cn } from '@/lib/utils';
 
 interface VoiceAnalysis {
@@ -21,8 +22,10 @@ export const VoiceInput: React.FC<VoiceInputProps> = ({ onVoiceMessage, isLoadin
   const [isProcessing, setIsProcessing] = useState(false);
   const [transcript, setTranscript] = useState('');
   const [volume, setVolume] = useState(0);
+  const [selectedImage, setSelectedImage] = useState<File | null>(null);
   
   const recognitionRef = useRef<SpeechRecognition | null>(null);
+  const fileInputRef = useRef<HTMLInputElement>(null);
   const audioContextRef = useRef<AudioContext | null>(null);
   const analyserRef = useRef<AnalyserNode | null>(null);
   const animationRef = useRef<number>();
@@ -279,6 +282,21 @@ export const VoiceInput: React.FC<VoiceInputProps> = ({ onVoiceMessage, isLoadin
     }
   };
 
+  const handleImageUpload = (event: React.ChangeEvent<HTMLInputElement>) => {
+    const file = event.target.files?.[0];
+    if (file) {
+      setSelectedImage(file);
+      // Basic facial expression analysis placeholder
+      const analysis: VoiceAnalysis = {
+        emotion: 'contemplative',
+        behavior: 'seeking',
+        confidence: 0.7,
+        text: `[Image uploaded: ${file.name}] Analyzing facial expression for emotional state...`
+      };
+      onVoiceMessage(analysis);
+    }
+  };
+
   return (
     <Card className="p-4 bg-card border-emerald-lighter/30 shadow-gentle">
       <div className="space-y-4">
@@ -302,6 +320,15 @@ export const VoiceInput: React.FC<VoiceInputProps> = ({ onVoiceMessage, isLoadin
             )}
             
             <Button
+              onClick={() => fileInputRef.current?.click()}
+              disabled={isLoading || isProcessing}
+              className="bg-gradient-to-r from-purple-500 to-blue-500 hover:from-purple-600 hover:to-blue-600 text-white transition-all duration-300"
+              title="Upload image for facial expression analysis"
+            >
+              <ImagePlus className="w-4 h-4" />
+            </Button>
+            
+            <Button
               onClick={isListening ? stopListening : startListening}
               disabled={isLoading || isProcessing}
               className={cn(
@@ -313,6 +340,14 @@ export const VoiceInput: React.FC<VoiceInputProps> = ({ onVoiceMessage, isLoadin
             >
               {isListening ? <MicOff className="w-4 h-4" /> : <Mic className="w-4 h-4" />}
             </Button>
+            
+            <Input
+              ref={fileInputRef}
+              type="file"
+              accept="image/*"
+              onChange={handleImageUpload}
+              className="hidden"
+            />
           </div>
         </div>
 
