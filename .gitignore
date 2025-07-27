@@ -22,3 +22,23 @@ dist-ssr
 *.njsproj
 *.sln
 *.sw?
+# Deno
+.DS_Store
+node_modules/
+dist/
+.env
+*.log
+
+# VSCode settings
+.vscode/
+
+# OS generated files
+Thumbs.db
+*.DS_Store
+
+# Supabase build artifacts
+supabase/.temp
+supabase/migrations
+
+# Local dev artifacts
+*.sqlite
