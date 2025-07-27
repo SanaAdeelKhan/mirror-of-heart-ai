@@ -113,11 +113,14 @@ This isn’t just another chatbot. It’s a spiritual mirror to your emotions.
 **👥 Team Members**
 
 Sana Adeel
+
 Muhammad Sajjad Hussain
+
 Muhammad Noor Baloch
 
 **🎯 Submitted To**
 CS Girlies Hackathon
+
 Track: A.I vs H.I (Human Intelligence)
 
 
