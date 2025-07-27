@@ -26,10 +26,12 @@ All wrapped in **nature metaphors**, **healing language**, and **faith-based com
 ## 🌟 Track Alignment
 
 🎭 **Human-Centered AI: Empathy, Identity & Expression**  
-> *“AI that listens, understands, and uplifts.”*  
-This project pushes the boundaries of generative AI by aligning it with deep emotional intelligence and spiritual identity. It's not just automation — it's soulful augmentation.
+Mirror of Heart AI is a creative collaboration between human soul and machine mind. It is:
+- A tool for **emotional reflection**, not productivity.
+- A design that prioritizes **tone, mood, and feeling**, not just accuracy.
+- A gentle rebellion against dry automation — creating beauty and stillness through code.
 
----
+It fits best in **The Creative Strand** because it uses AI to co-write soulful responses, grounded in meaning and spirit, designed to feel **uncannily human** and uniquely comforting.
 
 
 
