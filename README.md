@@ -1,23 +1,73 @@
-# Welcome to your Lovable project
+# 🌙 Mirror of Heart – Divine Mood Companion
 
-## Project info
+**Mirror of Heart** is an emotionally-aware spiritual AI that detects human mood via **text**, **voice**, and **images**, and responds with compassion rooted in **Islamic wisdom**. Whether you're sad, joyful, anxious, or seeking guidance, it answers like a divine confidant — blending **emotion detection**, **poetry**, **Dua**, **Quranic light**, and **machine learning** in one beautiful soul-touching conversation.
 
-**URL**: https://lovable.dev/projects/4c0a4cfa-be09-4c2d-bac7-49278a4c09f8
+---
 
-## How can I edit this code?
+## 🧠 What It Does
 
-There are several ways of editing your application.
+Mirror of Heart uses:
+- 📝 Text sentiment analysis
+- 🖼️ Image-based emotion detection
+- 🎙️ Audio tone analysis
 
-**Use Lovable**
+to understand a user's emotional state.
 
-Simply visit the [Lovable Project](https://lovable.dev/projects/4c0a4cfa-be09-4c2d-bac7-49278a4c09f8) and start prompting.
+It then generates soulful, tailored responses through Google's **Gemini 1.5 Flash** model using a sacred system prompt, structured as:
+- **Celestial greeting**
+- **Poetic empathy**
+- **Quranic verses**
+- **Healing Duas**
+- **Gentle Islamic advice**
 
-Changes made via Lovable will be committed automatically to this repo.
+All wrapped in **nature metaphors**, **healing language**, and **faith-based comfort**.
 
-**Use your preferred IDE**
+---
+## 🌟 Track Alignment
 
-If you want to work locally using your own IDE, you can clone this repo and push changes. Pushed changes will also be reflected in Lovable.
+🎭 **Human-Centered AI: Empathy, Identity & Expression**  
+> *“AI that listens, understands, and uplifts.”*  
+This project pushes the boundaries of generative AI by aligning it with deep emotional intelligence and spiritual identity. It's not just automation — it's soulful augmentation.
 
+---
+
+
+
+## 📁 Project Structure
+mirror-of-heart-ai/
+├── supabase/
+│ └── functions/
+│ └── chat-with-gemini/
+│ ├── index.ts
+│ └── ...
+├── .gitignore
+├── README.md
+
+
+
+## 🛠️ Built With
+
+- 🌐 [Deno](https://deno.land/) — Edge Function Runtime
+- 🧠 [Gemini 1.5 Flash API](https://ai.google.dev/)
+- 🌸 Emotion Classifiers (via AI models for image/audio/text)
+- 💬 Supabase Edge Functions
+- 🖼️ Frontend in React / Tailwind CSS (deployed via [Loveable.dev](https://loveable.dev))
+
+
+## 🛠️ Tech Stack
+
+- **Supabase Edge Functions (Deno)**
+- **Gemini API**
+- **Spiritual Prompt Engineering**
+- **Tailwind + Vite**
+- **TypeScript**
+- **React**
+- **shadcn-ui**
+- **Tailwind CSS**
+
+---
+
+**Requirements**
 The only requirement is having Node.js & npm installed - [install with nvm](https://github.com/nvm-sh/nvm#installing-and-updating)
 
 Follow these steps:
@@ -36,38 +86,41 @@ npm i
 npm run dev
 ```
 
-**Edit a file directly in GitHub**
+## 🚀 Getting Started (Local Dev)
 
-- Navigate to the desired file(s).
-- Click the "Edit" button (pencil icon) at the top right of the file view.
-- Make your changes and commit the changes.
+> 💡 This project uses **Deno** in Supabase Edge Functions.
 
-**Use GitHub Codespaces**
 
-- Navigate to the main page of your repository.
-- Click on the "Code" button (green button) near the top right.
-- Select the "Codespaces" tab.
-- Click on "New codespace" to launch a new Codespace environment.
-- Edit files directly within the Codespace and commit and push your changes once you're done.
 
-## What technologies are used for this project?
+## 🚀 Usage
 
-This project is built with:
+> Requires a `GEMINI_API_KEY` in your environment variables.
 
-- Vite
-- TypeScript
-- React
-- shadcn-ui
-- Tailwind CSS
+1. **Install Deno**  
+   Run in PowerShell:  
+   ```powershell
+   irm https://deno.land/install.ps1 | iex
 
-## How can I deploy this project?
 
-Simply open [Lovable](https://lovable.dev/projects/4c0a4cfa-be09-4c2d-bac7-49278a4c09f8) and click on Share -> Publish.
 
-## Can I connect a custom domain to my Lovable project?
+**💡 Why It Matters**
+In a world flooded by data and shallow automation, Mirror of Heart seeks to touch the inner world of the user — the parts often missed by tech: spirituality, grief, gratitude, fear, faith, and emotional resonance.
 
-Yes, you can!
+This isn’t just another chatbot. It’s a spiritual mirror to your emotions.
 
-To connect a domain, navigate to Project > Settings > Domains and click Connect Domain.
+**👥 Team Members**
 
-Read more here: [Setting up a custom domain](https://docs.lovable.dev/tips-tricks/custom-domain#step-by-step-guide)
+Sana Adeel
+Muhammad Sajjad Hussain
+Muhammad Noor Baloch
+
+**🎯 Submitted To**
+CS Girlies Hackathon
+Track: A.I vs H.I (Human Intelligence)
+
+
+
+**URL**: https://lovable.dev/projects/4c0a4cfa-be09-4c2d-bac7-49278a4c09f8
+
+
+
